@@ -34,7 +34,10 @@ class TestRoutes(TestCase):
         for name, args in urls:
             with self.subTest(name=name):
                 url = reverse(name, args=args)
-                response = self.client.get(url)
+                request_method = self.client.get
+                if name == 'users:logout':
+                    request_method = self.client.post
+                response = request_method(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_availability_for_comment_edit_and_delete(self):
